@@ -147,7 +147,7 @@ export default function Users() {
               if (!values.roleKey) {
                 errors.roleKey = "Role Required";
               }
-              if (!values.password) {
+              if (!values.password || values.password.length < 6) {
                 errors.password = "Password Required";
               }
               if (!values.mobile || values.mobile.length != 10) {
@@ -236,7 +236,7 @@ export default function Users() {
                 <div>
                   <Button
                     variant="contained"
-                    className="submit-button"
+                    // className="submit-button"
                     onClick={handleClose}
                     style={{ marginRight: "20px" }}
                   >

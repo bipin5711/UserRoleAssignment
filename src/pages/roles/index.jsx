@@ -83,7 +83,7 @@ export default function Roles() {
                     {row?.roleLabel}
                   </TableCell>
                   <TableCell align="right">{row?.roleKey}</TableCell>
-                  <TableCell align="right" className='flex-container'>
+                  <TableCell align="right" className="flex-container">
                     <EditIcon
                       onClick={() => {
                         setEditRoleIndex(index);
@@ -158,15 +158,23 @@ export default function Roles() {
                   error={errors.roleKey}
                   fullWidth
                 />
-
-                <Button
-                  type="submit"
-                  variant="contained"
-                  disabled={isSubmitting}
-                  className="submit-button"
-                >
-                  Submit
-                </Button>
+                <div>
+                  <Button
+                    variant="contained"
+                    onClick={handleClose}
+                    style={{ marginRight: "20px" }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    disabled={isSubmitting}
+                    className="submit-button"
+                  >
+                    Submit
+                  </Button>
+                </div>
               </Form>
             )}
           </Formik>
