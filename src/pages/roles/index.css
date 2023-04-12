@@ -1,0 +1,14 @@
+.title-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+.submit-button{
+    margin: 12px 0;
+    float: right;
+}
+.flex-container{
+    display: flex;
+    justify-content: space-between;
+    width: 70px;
+}
