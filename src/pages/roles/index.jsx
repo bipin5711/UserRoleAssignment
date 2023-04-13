@@ -12,8 +12,6 @@ import { Formik, Field, Form } from "formik";
 import TextField from "../../components/textfield";
 import { addRole, updateRole, deleteRole } from "../../redux/slice/roleSlice";
 import { useDispatch, useSelector } from "react-redux";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 import "./index.css";
 import * as Yup from "yup";
 
@@ -89,18 +87,26 @@ export default function Roles() {
                     {row?.roleLabel}
                   </TableCell>
                   <TableCell>{row?.roleKey}</TableCell>
-                  <TableCell align="right" className="flex-container">
-                    <EditIcon
-                      onClick={() => {
-                        setEditRoleIndex(index);
-                        handleOpenModal("edit", row);
-                      }}
-                    />
-                    <DeleteIcon
-                      onClick={() => {
-                        dispatch(deleteRole(index));
-                      }}
-                    />
+                  <TableCell align="right">
+                    <div className="flex-container">
+                      <Button
+                        onClick={() => {
+                          setEditRoleIndex(index);
+                          handleOpenModal("edit", row);
+                        }}
+                        variant="outlined"
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          dispatch(deleteRole(index));
+                        }}
+                        variant="outlined"
+                      >
+                        Delete
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}

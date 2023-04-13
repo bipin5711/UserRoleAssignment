@@ -12,8 +12,6 @@ import { Formik, Field, Form } from "formik";
 import TextField from "../../components/textfield";
 import { addUser, updateUser, deleteUser } from "../../redux/slice/userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 import "./index.css";
 import Select from "../../components/select";
 import * as Yup from "yup";
@@ -142,18 +140,26 @@ export default function Users() {
                   <TableCell align="left">{row?.username}</TableCell>
                   <TableCell align="left">{row?.mobile}</TableCell>
                   <TableCell align="left">{row?.roleKey}</TableCell>
-                  <TableCell align="right" className="flex-container">
-                    <EditIcon
-                      onClick={() => {
-                        setEditUserIndex(index);
-                        handleOpenModal("edit", { ...row, password: "" });
-                      }}
-                    />
-                    <DeleteIcon
-                      onClick={() => {
-                        dispatch(deleteUser(index));
-                      }}
-                    />
+                  <TableCell align="right">
+                    <div className="flex-container">
+                      <Button
+                        onClick={() => {
+                          setEditUserIndex(index);
+                          handleOpenModal("edit", { ...row, password: "" });
+                        }}
+                        variant="outlined"
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        onClick={() => {
+                          dispatch(deleteUser(index));
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}

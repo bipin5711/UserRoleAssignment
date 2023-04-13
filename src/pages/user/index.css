@@ -10,6 +10,6 @@
 .flex-container{
     display: flex;
     justify-content: space-between;
-    width: 70px;
+    width: 190px;
     float: right;
 }
