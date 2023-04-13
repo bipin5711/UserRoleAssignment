@@ -15,6 +15,12 @@ import { useDispatch, useSelector } from "react-redux";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import "./index.css";
+import * as Yup from "yup";
+
+const roleSchema = Yup.object().shape({
+  roleKey: Yup.string().required("Role key is required"),
+  roleLabel: Yup.string().required("Role label is required"),
+});
 
 const style = {
   position: "absolute",
@@ -109,16 +115,7 @@ export default function Roles() {
           </Typography>
           <Formik
             initialValues={showModal.initialValues}
-            validate={(values) => {
-              const errors = {};
-              if (!values.roleLabel) {
-                errors.roleLabel = "Label Required";
-              }
-              if (!values.roleKey) {
-                errors.roleKey = "Key Required";
-              }
-              return errors;
-            }}
+            validationSchema={roleSchema}
             enableReinitialize={true}
             onSubmit={(values, { setSubmitting }) => {
               if (showModal.type == "edit") {
