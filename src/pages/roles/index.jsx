@@ -82,7 +82,7 @@ export default function Roles() {
                   <TableCell component="th" scope="row">
                     {row?.roleLabel}
                   </TableCell>
-                  <TableCell align="right">{row?.roleKey}</TableCell>
+                  <TableCell>{row?.roleKey}</TableCell>
                   <TableCell align="right" className="flex-container">
                     <EditIcon
                       onClick={() => {
