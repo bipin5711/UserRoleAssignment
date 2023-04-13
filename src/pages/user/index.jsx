@@ -16,6 +16,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import "./index.css";
 import Select from "../../components/select";
+import * as Yup from "yup";
 
 const style = {
   position: "absolute",
@@ -27,6 +28,32 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
+
+const userSchema = Yup.object().shape({
+  name: Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Name is required"),
+
+  username: Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Username is required"),
+
+  roleKey: Yup.string().required("Role is required"),
+
+  mobile: Yup.string()
+    .required("mobile number is required")
+    .min(10, "Invalid mobile number")
+    .max(10, "Invalid mobile number"),
+
+  email: Yup.string().email().required("Email is required"),
+
+  password: Yup.string()
+    .required("Password is required")
+    .min(6, "Password is too short - should be 6 chars minimum"),
+});
+
 export default function Users() {
   const dispatch = useDispatch();
   const users = useSelector((state) => state.users);
@@ -37,6 +64,7 @@ export default function Users() {
     type: "",
     initialValues: {},
   });
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const handleClose = () => {
     setShowModal({ state: false, type: "" });
     setEditUserIndex(null);
@@ -58,7 +86,14 @@ export default function Users() {
             },
     });
   };
-
+  const handleSubmit = (values, { setSubmitting }) => {
+    if (showModal.type == "edit") {
+      dispatch(updateUser({ data: values, index: editUserIndex }));
+    } else {
+      dispatch(addUser(values));
+    }
+    handleClose();
+  };
   return (
     <Layout>
       <Box className="title-container">
@@ -133,126 +168,99 @@ export default function Users() {
           </Typography>
           <Formik
             initialValues={showModal.initialValues}
-            validate={(values) => {
-              const errors = {};
-              if (!values.name) {
-                errors.name = "Name Required";
-              }
-              if (!values.email) {
-                errors.email = "Email Required";
-              }
-              if (!values.username) {
-                errors.username = "Username Required";
-              }
-              if (!values.roleKey) {
-                errors.roleKey = "Role Required";
-              }
-              if (!values.password || values.password.length < 6) {
-                errors.password = "Password Required";
-              }
-              if (!values.mobile || values.mobile.length != 10) {
-                errors.mobile = "Mobile Required";
-              }
-              return errors;
-            }}
+            validationSchema={userSchema}
             enableReinitialize={true}
-            onSubmit={(values, { setSubmitting }) => {
-              if (showModal.type == "edit") {
-                dispatch(updateUser({ data: values, index: editUserIndex }));
-              } else {
-                dispatch(addUser(values));
-              }
-              handleClose();
-            }}
+            onSubmit={handleSubmit}
           >
             {({
               values,
               errors,
               touched,
               handleChange,
-              handleSubmit,
               isSubmitting,
               setFieldValue,
-            }) => (
-              <Form>
-                <Field
-                  value={values.name}
-                  label="Name"
-                  name="name"
-                  setFieldValue={setFieldValue}
-                  as={TextField}
-                  error={errors.name}
-                  fullWidth
-                />
-                <Field
-                  value={values.username}
-                  setFieldValue={setFieldValue}
-                  label="Username"
-                  name="username"
-                  as={TextField}
-                  error={errors.username}
-                  fullWidth
-                />
-                <Field
-                  value={values.email}
-                  setFieldValue={setFieldValue}
-                  label="Email"
-                  name="email"
-                  as={TextField}
-                  error={errors.email}
-                  fullWidth
-                />
-                <Field
-                  value={values.roleKey}
-                  setFieldValue={setFieldValue}
-                  label="Role"
-                  options={roles}
-                  handleChange={(e, val) => {
-                    setFieldValue("roleKey", e.target.value);
-                  }}
-                  name="roleKey"
-                  as={Select}
-                  error={errors.roleKey}
-                  // fullWidth
-                />
-                <Field
-                  value={values.mobile}
-                  setFieldValue={setFieldValue}
-                  label="Mobile"
-                  name="mobile"
-                  as={TextField}
-                  error={errors.mobile}
-                  fullWidth
-                />
-                <Field
-                  value={values.password}
-                  setFieldValue={setFieldValue}
-                  label="Password"
-                  name="password"
-                  as={TextField}
-                  error={errors.password}
-                  fullWidth
-                />
-                <div>
-                  <Button
-                    variant="contained"
-                    // className="submit-button"
-                    onClick={handleClose}
-                    style={{ marginRight: "20px" }}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    disabled={isSubmitting}
-                    className="submit-button"
-                  >
-                    Submit
-                  </Button>
-                </div>
-              </Form>
-            )}
+            }) => {
+              return (
+                <Form>
+                  <Field
+                    value={values.name}
+                    label="Name"
+                    name="name"
+                    setFieldValue={setFieldValue}
+                    as={TextField}
+                    error={errors.name}
+                    fullWidth
+                  />
+                  <Field
+                    value={values.username}
+                    setFieldValue={setFieldValue}
+                    label="Username"
+                    name="username"
+                    as={TextField}
+                    error={errors.username}
+                    fullWidth
+                  />
+                  <Field
+                    value={values.email}
+                    setFieldValue={setFieldValue}
+                    label="Email"
+                    name="email"
+                    as={TextField}
+                    error={errors.email}
+                    fullWidth
+                  />
+                  <Field
+                    value={values.roleKey}
+                    setFieldValue={setFieldValue}
+                    label="Role"
+                    options={roles}
+                    handleChange={(e, val) => {
+                      setFieldValue("roleKey", e.target.value);
+                    }}
+                    name="roleKey"
+                    as={Select}
+                    error={errors.roleKey}
+                    // fullWidth
+                  />
+                  <Field
+                    value={values.mobile}
+                    setFieldValue={setFieldValue}
+                    label="Mobile"
+                    name="mobile"
+                    as={TextField}
+                    error={errors.mobile}
+                    fullWidth
+                  />
+                  <Field
+                    value={values.password}
+                    setFieldValue={setFieldValue}
+                    label="Password"
+                    name="password"
+                    as={TextField}
+                    error={errors.password}
+                    fullWidth
+                  />
+                  <div>
+                    <Button
+                      variant="contained"
+                      // className="submit-button"
+                      onClick={handleClose}
+                      style={{ marginRight: "20px" }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      disabled={isSubmitting}
+                      className="submit-button"
+                    >
+                      Submit
+                    </Button>
+                  </div>
+                </Form>
+              );
+            }}
           </Formik>
         </Box>
       </Modal>
