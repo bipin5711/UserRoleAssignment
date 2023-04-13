@@ -13,17 +13,16 @@ export default function Header() {
   ];
   return (
     <AppBar position="static" className="appbar">
-    
-    <div className="header-row">
-      <img src={logo} className="logo" />
-      
-      <div className="header-link">
-      {pages.map((page) => (
-        <Link className="header-title" key={page.title} to={page.url}>
-          {page.title}
-        </Link>
-      ))}
-      </div>
+      <div className="header-row">
+        <img src={logo} className="logo" alt="logo" />
+
+        <div className="header-link">
+          {pages.map((page) => (
+            <Link className="header-title" key={page.title} to={page.url}>
+              {page.title}
+            </Link>
+          ))}
+        </div>
       </div>
     </AppBar>
   );
